@@ -7,7 +7,16 @@ const ReportSchema = new mongoose.Schema({
   location: { type: String, required: true },
   image: { type: String, required: true },
   status: { type: String, default: "Pending" },
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  comments: [
+    {
+      userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      name: { type: String },
+      text: { type: String, required: true },
+      createdAt: { type: Date, default: Date.now }
+    }
+  ]
 }, { timestamps: true });
 
 module.exports = mongoose.model("Report", ReportSchema);

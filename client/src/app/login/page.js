@@ -21,7 +21,7 @@ export default function Login() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.msg || "Login failed");
       localStorage.setItem("token", data.token);
-      router.push("/report");
+      router.push("/home");
     } catch (err) {
       setError(err.message);
     }
