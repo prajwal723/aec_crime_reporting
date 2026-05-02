@@ -5,7 +5,7 @@ const ReportSchema = new mongoose.Schema({
   description: { type: String, required: true },
   category: { type: String, required: true },
   location: { type: String, required: true },
-  image: { type: String, required: true },
+  image: { type: String, required: false },
   status: { type: String, default: "Pending" },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],

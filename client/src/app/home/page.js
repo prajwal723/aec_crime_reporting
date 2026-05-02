@@ -298,8 +298,6 @@ export default function HomeFeed() {
             SmartCity
           </Link>
           <div className="flex items-center gap-2 sm:gap-6">
-            <Link href="/home" className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hidden sm:block">Feed</Link>
-            <Link href="/report" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors hidden sm:block">Report Issue</Link>
             <Link href="/dashboard" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors hidden sm:block">Dashboard</Link>
             <Link
               href="/report"
@@ -359,7 +357,7 @@ export default function HomeFeed() {
             <div className="relative">
               <input
                 type="text"
-                placeholder="e.g. Downtown, Park Ave..."
+                placeholder="Mangalore, Bangalore"
                 value={locationFilter}
                 onChange={(e) => setLocationFilter(e.target.value)}
                 className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-2.5 px-10 text-sm font-medium text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-indigo-500 placeholder-slate-400"

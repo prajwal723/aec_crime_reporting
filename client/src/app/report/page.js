@@ -41,7 +41,6 @@ const INITIAL_FORM = {
   title: "",
   description: "",
   category: "",
-  department: "",
   location: "",
   tags: [],
   image: "",
@@ -80,10 +79,8 @@ export default function ReportIssue() {
     const newErrors = {};
     if (!formData.title.trim()) newErrors.title = "Title is required.";
     if (!formData.category) newErrors.category = "Please select a category.";
-    if (!formData.department) newErrors.department = "Please select a department to route this report.";
     if (!formData.location.trim()) newErrors.location = "Location is required.";
     if (!formData.description.trim()) newErrors.description = "Description is required.";
-    if (!formData.image) newErrors.image = "Photo evidence is required.";
     return newErrors;
   };
 
@@ -228,7 +225,7 @@ export default function ReportIssue() {
                 </label>
                 <input
                   type="text"
-                  placeholder="123 Main St, Near Central Park…"
+                  placeholder="Mangalore, Bangalore"
                   className={`w-full px-4 py-3 bg-slate-800 border ${errors.location ? "border-rose-500" : "border-slate-700 focus:border-indigo-500"} rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all`}
                   value={formData.location}
                   onChange={(e) => { setFormData((p) => ({ ...p, location: e.target.value })); setErrors((p) => ({ ...p, location: "" })); }}
@@ -254,49 +251,7 @@ export default function ReportIssue() {
 
           <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
             <div className="border-b border-slate-800 pb-3">
-              <h2 className="font-bold text-lg text-white">2. Route to Department <span className="text-rose-400">*</span></h2>
-              <p className="text-slate-500 text-sm mt-0.5">Select the official department responsible for handling this type of issue.</p>
-            </div>
-            {errors.department && (
-              <p className="text-rose-400 text-sm flex items-center gap-1.5 font-medium">⚠ {errors.department}</p>
-            )}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {DEPARTMENTS.map((dept) => {
-                const isSelected = formData.department === dept.id;
-                return (
-                  <button
-                    key={dept.id}
-                    type="button"
-                    onClick={() => { setFormData((p) => ({ ...p, department: dept.id })); setErrors((p) => ({ ...p, department: "" })); }}
-                    className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
-                      isSelected
-                        ? "border-indigo-500 bg-indigo-500/10"
-                        : "border-slate-700 bg-slate-800/50 hover:border-slate-600 hover:bg-slate-800"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">{dept.icon}</span>
-                      <div>
-                        <div className={`font-semibold text-sm ${isSelected ? "text-indigo-300" : "text-slate-200"}`}>{dept.label}</div>
-                        <div className="text-xs text-slate-500 mt-0.5">{dept.description}</div>
-                      </div>
-                      {isSelected && (
-                        <div className="ml-auto w-5 h-5 rounded-full bg-indigo-500 flex items-center justify-center flex-shrink-0">
-                          <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </section>
-
-          <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <div className="border-b border-slate-800 pb-3">
-              <h2 className="font-bold text-lg text-white">3. Tag Official Entities <span className="text-slate-500 font-normal text-sm">(Optional)</span></h2>
+              <h2 className="font-bold text-lg text-white">2. Tag Official Entities <span className="text-slate-500 font-normal text-sm">(Optional)</span></h2>
               <p className="text-slate-500 text-sm mt-0.5">Select any additional city bodies you want to notify directly.</p>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -325,7 +280,7 @@ export default function ReportIssue() {
 
           <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
             <div className="border-b border-slate-800 pb-3">
-              <h2 className="font-bold text-lg text-white">4. Photo Evidence <span className="text-rose-400">*</span></h2>
+              <h2 className="font-bold text-lg text-white">3. Photo Evidence <span className="text-slate-500 font-normal text-sm">(Optional)</span></h2>
               <p className="text-slate-500 text-sm mt-0.5">Clear photographic evidence helps authorities act faster.</p>
             </div>
             {errors.image && (

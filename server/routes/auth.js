@@ -42,6 +42,11 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ msg: "Invalid Credentials" });
     }
 
+    await User.updateOne(
+      { _id: user.id },
+      { $set: { lastLoginAt: new Date() }, $inc: { loginCount: 1 } }
+    );
+
     const payload = { user: { id: user.id } };
     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "5h" }, (err, token) => {
       if (err) throw err;
