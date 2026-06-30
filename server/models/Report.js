@@ -19,4 +19,8 @@ const ReportSchema = new mongoose.Schema({
   ]
 }, { timestamps: true });
 
+ReportSchema.index({ createdAt: -1 });
+ReportSchema.index({ category: 1 });
+ReportSchema.index({ location: "text" });
+
 module.exports = mongoose.model("Report", ReportSchema);

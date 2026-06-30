@@ -97,7 +97,7 @@ export default function ReportIssue() {
 
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:5000/api/report", {
+      const res = await fetch("http://localhost:5007/api/report", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -262,11 +262,10 @@ export default function ReportIssue() {
                     key={entity}
                     type="button"
                     onClick={() => toggleTag(entity)}
-                    className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all ${
-                      isTagged
+                    className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all ${isTagged
                         ? "bg-indigo-600 border-indigo-500 text-white"
                         : "bg-slate-800 border-slate-700 text-slate-400 hover:border-indigo-500/50 hover:text-slate-200"
-                    }`}
+                      }`}
                   >
                     {isTagged ? "✓ " : ""}{entity}
                   </button>

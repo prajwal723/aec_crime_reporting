@@ -38,7 +38,7 @@ export default function AdminPage() {
 
     const loadStats = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/admin/stats", {
+        const res = await fetch("http://localhost:5007/api/admin/stats", {
           headers: { Authorization: "Bearer admin" },
         });
         const data = await res.json();

@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const DEPT_STYLES = {
-  Crime:         { bg: "bg-red-50 dark:bg-red-900/20",     text: "text-red-700 dark:text-red-300",     border: "border-red-200 dark:border-red-800",     dot: "bg-red-500"    },
-  Fire:          { bg: "bg-orange-50 dark:bg-orange-900/20", text: "text-orange-700 dark:text-orange-300", border: "border-orange-200 dark:border-orange-800", dot: "bg-orange-500" },
-  Medical:       { bg: "bg-emerald-50 dark:bg-emerald-900/20", text: "text-emerald-700 dark:text-emerald-300", border: "border-emerald-200 dark:border-emerald-800", dot: "bg-emerald-500" },
-  Sanitation:    { bg: "bg-yellow-50 dark:bg-yellow-900/20", text: "text-yellow-700 dark:text-yellow-300", border: "border-yellow-200 dark:border-yellow-800", dot: "bg-yellow-500" },
+  Crime: { bg: "bg-red-50 dark:bg-red-900/20", text: "text-red-700 dark:text-red-300", border: "border-red-200 dark:border-red-800", dot: "bg-red-500" },
+  Fire: { bg: "bg-orange-50 dark:bg-orange-900/20", text: "text-orange-700 dark:text-orange-300", border: "border-orange-200 dark:border-orange-800", dot: "bg-orange-500" },
+  Medical: { bg: "bg-emerald-50 dark:bg-emerald-900/20", text: "text-emerald-700 dark:text-emerald-300", border: "border-emerald-200 dark:border-emerald-800", dot: "bg-emerald-500" },
+  Sanitation: { bg: "bg-yellow-50 dark:bg-yellow-900/20", text: "text-yellow-700 dark:text-yellow-300", border: "border-yellow-200 dark:border-yellow-800", dot: "bg-yellow-500" },
   "Crime & Safety": { bg: "bg-red-50 dark:bg-red-900/20", text: "text-red-700 dark:text-red-300", border: "border-red-200 dark:border-red-800", dot: "bg-red-500" },
-  default:       { bg: "bg-indigo-50 dark:bg-indigo-900/20", text: "text-indigo-700 dark:text-indigo-300", border: "border-indigo-200 dark:border-indigo-800", dot: "bg-indigo-500" },
+  default: { bg: "bg-indigo-50 dark:bg-indigo-900/20", text: "text-indigo-700 dark:text-indigo-300", border: "border-indigo-200 dark:border-indigo-800", dot: "bg-indigo-500" },
 };
 
 function getDeptStyle(category) {
@@ -116,20 +116,18 @@ function ReportCard({ report, currentUser, onLike, onComment }) {
 
       {report.image && (
         <div className="mx-5 mb-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 aspect-video bg-slate-100 dark:bg-slate-800">
-          <img src={report.image} alt={report.title} className="w-full h-full object-cover" />
+          <img src={report.image} alt={report.title} className="w-full h-full object-cover" loading="lazy" />
         </div>
       )}
 
       <div className="px-5 py-3 border-t border-slate-100 dark:border-slate-800 flex items-center gap-6">
         <button
           onClick={handleLikeClick}
-          className={`flex items-center gap-2 text-sm font-semibold transition-colors group ${
-            liked ? "text-rose-500" : "text-slate-500 dark:text-slate-400 hover:text-rose-500"
-          }`}
+          className={`flex items-center gap-2 text-sm font-semibold transition-colors group ${liked ? "text-rose-500" : "text-slate-500 dark:text-slate-400 hover:text-rose-500"
+            }`}
         >
-          <span className={`p-1.5 rounded-full transition-colors ${
-            liked ? "bg-rose-100 dark:bg-rose-900/30" : "group-hover:bg-rose-100 dark:group-hover:bg-rose-900/30"
-          }`}>
+          <span className={`p-1.5 rounded-full transition-colors ${liked ? "bg-rose-100 dark:bg-rose-900/30" : "group-hover:bg-rose-100 dark:group-hover:bg-rose-900/30"
+            }`}>
             <svg className="w-[18px] h-[18px]" fill={liked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
@@ -195,29 +193,33 @@ function ReportCard({ report, currentUser, onLike, onComment }) {
 export default function HomeFeed() {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [locationFilter, setLocationFilter] = useState("");
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) { router.push("/login"); return; }
 
-    const fetchUser = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/me", { headers: { Authorization: `Bearer ${token}` } });
-        if (res.ok) setCurrentUser(await res.json());
-      } catch { console.error("Failed to fetch user"); }
-    };
+        const [userRes, reportsRes] = await Promise.all([
+          fetch("http://localhost:5007/api/auth/me", { headers: { Authorization: `Bearer ${token}` } }),
+          fetch("http://localhost:5007/api/report/all?page=1&limit=10", { headers: { Authorization: `Bearer ${token}` } })
+        ]);
 
-    const fetchReports = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/report/all", { headers: { Authorization: `Bearer ${token}` } });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.msg || "Failed to load");
-        setReports(data);
+        if (userRes.ok) setCurrentUser(await userRes.json());
+
+        const reportsData = await reportsRes.json();
+        if (!reportsRes.ok) throw new Error(reportsData.msg || "Failed to load");
+
+        setReports(reportsData.reports);
+        setHasMore(reportsData.currentPage < reportsData.totalPages);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -225,9 +227,31 @@ export default function HomeFeed() {
       }
     };
 
-    fetchUser();
-    fetchReports();
+    fetchData();
   }, [router]);
+
+  const loadMore = async () => {
+    if (loadingMore || !hasMore) return;
+    setLoadingMore(true);
+    const token = localStorage.getItem("token");
+    const nextPage = page + 1;
+
+    try {
+      const res = await fetch(`http://localhost:5007/api/report/all?page=${nextPage}&limit=10`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setReports(prev => [...prev, ...data.reports]);
+        setPage(nextPage);
+        setHasMore(data.currentPage < data.totalPages);
+      }
+    } catch (err) {
+      console.error("Load more error:", err);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   const handleLogout = () => { localStorage.removeItem("token"); router.push("/"); };
 
@@ -240,7 +264,7 @@ export default function HomeFeed() {
   const handleLike = async (id) => {
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch(`http://localhost:5000/api/report/like/${id}`, {
+      const res = await fetch(`http://localhost:5007/api/report/like/${id}`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -259,7 +283,7 @@ export default function HomeFeed() {
   const handleComment = async (id, text) => {
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch(`http://localhost:5000/api/report/comment/${id}`, {
+      const res = await fetch(`http://localhost:5007/api/report/comment/${id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ text })
@@ -394,6 +418,28 @@ export default function HomeFeed() {
                 onComment={handleComment}
               />
             ))}
+
+            {hasMore && (
+              <div className="pt-4 flex justify-center">
+                <button
+                  onClick={loadMore}
+                  disabled={loadingMore}
+                  className="px-6 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-2"
+                >
+                  {loadingMore ? (
+                    <>
+                      <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                      </svg>
+                      Loading...
+                    </>
+                  ) : (
+                    "Load More Reports"
+                  )}
+                </button>
+              </div>
+            )}
           </div>
         )}
       </main>

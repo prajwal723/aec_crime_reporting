@@ -21,7 +21,7 @@ export default function Dashboard() {
 
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/me", {
+        const res = await fetch("http://localhost:5007/api/auth/me", {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
@@ -50,7 +50,7 @@ export default function Dashboard() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/auth/profile", {
+      const res = await fetch("http://localhost:5007/api/auth/profile", {
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",

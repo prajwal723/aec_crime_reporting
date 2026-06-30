@@ -20,7 +20,7 @@ export default function Login() {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch("http://localhost:5007/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -35,7 +35,7 @@ export default function Login() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-6 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center">
+    <div className="relative min-h-screen flex items-center justify-center p-6 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop&q=60')] bg-cover bg-center">
       <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm"></div>
       
       <div className="glass-card relative z-10 w-full max-w-lg p-10 transform transition-all">

@@ -23,11 +23,25 @@ router.post("/", auth, async (req, res) => {
 
 router.get("/all", auth, async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
     const reports = await Report.find()
       .populate("userId", "name email")
       .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
       .lean();
-    return res.status(200).json(reports);
+
+    const total = await Report.countDocuments();
+
+    return res.status(200).json({
+      reports,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalReports: total
+    });
   } catch (err) {
     console.error("Fetch error:", err.message);
     return res.status(500).json({ msg: "Server Error" });

@@ -13,7 +13,7 @@ export default function Home() {
           </div>
           
           <h1 className="text-6xl md:text-8xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 drop-shadow-lg">
-            SmartCity AI
+            SmartCity 
           </h1>
           <p className="text-xl md:text-3xl text-slate-300 font-light max-w-3xl mx-auto leading-relaxed">
             Report emergencies and local issues instantly. Our intelligent routing ensures your voice reaches the right authorities faster than ever.
